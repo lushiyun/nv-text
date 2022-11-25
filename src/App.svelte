@@ -1,45 +1,58 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import Counter from './lib/Counter.svelte'
+	import { Canvas, InteractiveObject, OrbitControls, Three } from '@threlte/core'
+	import { spring } from 'svelte/motion'
+	import {
+		AmbientLight,
+		BoxGeometry,
+		CircleGeometry,
+		DirectionalLight,
+		Group,
+		Mesh,
+		MeshStandardMaterial,
+		PerspectiveCamera
+	} from 'three'
+	import { degToRad } from 'three/src/math/MathUtils'
+
+	const scale = spring(1)
 </script>
 
-<main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer"> 
-      <img src="/vite.svg" class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer"> 
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
+<div>
+	<Canvas>
+		<Three type={PerspectiveCamera} makeDefault position={[10, 10, 10]} fov={24}>
+			<OrbitControls maxPolarAngle={degToRad(80)} enableZoom={false} target={{ y: 0.5 }} />
+		</Three>
 
-  <div class="card">
-    <Counter />
-  </div>
+		<Three type={DirectionalLight} castShadow position={[3, 10, 10]} />
+		<Three type={DirectionalLight} position={[-3, 10, -10]} intensity={0.2} />
+		<Three type={AmbientLight} intensity={0.2} />
 
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
+		<!-- Cube -->
+		<Three type={Group} scale={$scale}>
+			<Three type={Mesh} position.y={0.5} castShadow let:ref>
+				<!-- Add interaction -->
+				<InteractiveObject
+					object={ref}
+					interactive
+					on:pointerenter={() => ($scale = 2)}
+					on:pointerleave={() => ($scale = 1)}
+				/>
 
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
-</main>
+				<Three type={BoxGeometry} />
+				<Three type={MeshStandardMaterial} color="#333333" />
+			</Three>
+		</Three>
+
+		<!-- Floor -->
+		<Three type={Mesh} receiveShadow rotation.x={degToRad(-90)}>
+			<Three type={CircleGeometry} args={[3, 72]} />
+			<Three type={MeshStandardMaterial} color="white" />
+		</Three>
+	</Canvas>
+</div>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
+	div {
+		height: 100%;
+		width: 100%;
+	}
 </style>
