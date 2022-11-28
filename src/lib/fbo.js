@@ -3,14 +3,13 @@ import {
 	OrthographicCamera,
 	WebGLRenderTarget,
 	NearestFilter,
-	RGBFormat,
+	RGBAFormat,
 	FloatType,
 	BufferGeometry,
 	BufferAttribute,
 	Points,
 	Mesh,
 } from 'three';
-
 export default class FBO {
 	constructor(width, height, renderer, simulationMaterial, renderMaterial) {
 		this.width = width;
@@ -25,7 +24,7 @@ export default class FBO {
 	}
 
 	init() {
-		this.checkHardware();
+		// this.checkHardware();
 		this.createTarget();
 		this.simSetup();
 		this.createParticles();
@@ -54,7 +53,7 @@ export default class FBO {
 		this.rtt = new WebGLRenderTarget(this.width, this.height, {
 			minFilter: NearestFilter, // Important because we want to sample square pixels
 			magFilter: NearestFilter,
-			format: RGBFormat, // Or RGBAFormat instead (to have a color for each particle, for example)
+			format: RGBAFormat, // Or RGBAFormat instead (to have a color for each particle, for example)
 			type: FloatType, // Important because we need precise coordinates (not ints)
 		});
 	}
@@ -100,6 +99,7 @@ export default class FBO {
 			let i3 = i * 3;
 			vertices[i3 + 0] = (i % this.width) / this.width;
 			vertices[i3 + 1] = i / this.width / this.height;
+			vertices[i3 + 2] = 0;
 		}
 
 		// Create the particles geometry
@@ -115,10 +115,11 @@ export default class FBO {
 		this.renderer.setRenderTarget(this.rtt);
 		this.renderer.clear();
 		this.renderer.render(this.scene, this.camera);
+
 		this.renderer.setRenderTarget(null);
 
 		// Use the result of the swap as the new position for the particles' renderer
-		this.particles.material.uniforms.positions.value = this.rtt.texture;
+		this.particles.material.uniforms.uPositions.value = this.rtt.texture;
 
 		this.simulationMaterial.uniforms.uTime.value = time;
 	}
