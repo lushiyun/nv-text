@@ -30,58 +30,25 @@
 	import simulationFragment from './shaders/simulation/fragmentShader';
 	import particleVertex from './shaders/particles/vertexShader';
 	import particleFragment from './shaders/particles/fragmentShader';
-	import { randomPointsInBufferGeometry } from './lib/util.js';
-
-	const getRandomData = (width, height) => {
-		// we need to create a vec4 since we're passing the positions to the fragment shader
-		// data textures need to have 4 components, R, G, B, and A
-		const length = width * height * 4;
-		const data = new Float32Array(length);
-
-		for (let i = 0; i < length; i++) {
-			const stride = i * 4;
-
-			const distance = Math.sqrt(Math.random() - 0.5) * 2.0;
-			const theta = MathUtils.randFloatSpread(360);
-			const phi = MathUtils.randFloatSpread(360);
-
-			data[stride] = distance * Math.sin(theta) * Math.cos(phi);
-			data[stride + 1] = distance * Math.sin(theta) * Math.sin(phi);
-			data[stride + 2] = distance * Math.cos(theta);
-			data[stride + 3] = 1.0; // this value will not have any impact
-		}
-
-		return data;
-	};
+	import { getRandomData, randomPointsInBufferGeometry } from './lib/util.js';
 
 	const { renderer, scene } = useThrelte();
 
 	export let sliderValue;
 
-	let textGeometry;
+	let font;
 
 	const fontLoader = useLoader(FontLoader, () => new FontLoader());
 	fontLoader.load('src/assets/yahei_bold.json', (f) => {
-		textGeometry = new TextGeometry('女', {
-			font: f,
-			size: 0.5,
-			height: 0.1,
-			curveSegments: 12,
-		});
-
+		font = f;
 		init();
 	});
 
 	let fbo;
 
-	const init = () => {
-		const width = 256;
-		const height = 256;
-
-		const data = new Float32Array(width * height * 4);
-
-		//first model
-		const points = randomPointsInBufferGeometry(textGeometry, width * height);
+	const getTextTexture = (textGeo) => {
+		const data = new Float32Array(256 * 256 * 4);
+		const points = randomPointsInBufferGeometry(textGeo, 256 * 256);
 
 		for (let i = 0, j = 0; i < data.length; i += 4, j += 1) {
 			data[i] = points[j].x;
@@ -90,16 +57,41 @@
 			data[i + 3] = 1.0;
 		}
 
-		const textureA = new DataTexture(
+		const texture = new DataTexture(
 			data,
-			width,
-			height,
+			256,
+			256,
 			RGBAFormat,
 			FloatType
 		);
-		textureA.minFilter = NearestFilter;
-		textureA.magFilter = NearestFilter;
-		textureA.needsUpdate = true;
+		texture.minFilter = NearestFilter;
+		texture.magFilter = NearestFilter;
+		texture.needsUpdate = true;
+
+		return texture;
+	}
+
+	const init = () => {
+		const width = 256;
+		const height = 256;
+
+		const textA = new TextGeometry('女', {
+			font,
+			size: 0.5,
+			height: 0.1,
+			curveSegments: 12,
+		});
+
+		const textureA = getTextTexture(textA);
+
+		const textB = new TextGeometry('男', {
+			font,
+			size: 0.5,
+			height: 0.1,
+			curveSegments: 12,
+		});
+
+		const textureC = getTextTexture(textB);
 
 		//second model
 		const dataB = getRandomData(width, height);
@@ -116,6 +108,7 @@
 			uniforms: {
 				textureA: { value: textureA },
 				textureB: { value: textureB },
+				textureC: { value: textureC },
 				timer: { value: 0 },
 			},
 			vertexShader: simulationVertex,

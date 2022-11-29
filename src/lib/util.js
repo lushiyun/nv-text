@@ -4,7 +4,7 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-import { Color, Vector3 } from 'three';
+import { Vector3, MathUtils } from 'three';
 
 // Get triangle area (half of parallelogram)
 // http://mathworld.wolfram.com/TriangleArea.html
@@ -103,7 +103,6 @@ const randomPointsInBufferGeometry = (geometry, n) => {
 		}
 
 		var result = binarySearch(0, cumulativeAreas.length - 1);
-		console.log(result);
 		return result;
 	}
 
@@ -140,34 +139,26 @@ const randomPointsInBufferGeometry = (geometry, n) => {
 	return result;
 };
 
-//returns a Float32Array buffer of random 3D coordinates
-function getRandomData( width, height, size ){
-	var len = width * height * 3;
-	var data = new Float32Array( len );
-	while( len-- )data[len] = ( Math.random() -.5 ) * size ;
-	return data;
-}
+const getRandomData = (width, height) => {
+	// we need to create a vec4 since we're passing the positions to the fragment shader
+	// data textures need to have 4 components, R, G, B, and A
+	const length = width * height * 4;
+	const data = new Float32Array(length);
 
-//returns a Float32Array buffer of spherical 3D points
-function getPoint(v, size) {
-	v.x = Math.random() * 2 - 1;
-	v.y = Math.random() * 2 - 1;
-	v.z = Math.random() * 2 - 1;
-	if (v.length() > 1) return getPoint(v, size);
-	return v.normalize().multiplyScalar(size);
-}
+	for (let i = 0; i < length; i++) {
+		const stride = i * 4;
 
-function getSphere(count, size) {
-	var len = count * 3;
-	var data = new Float32Array(len);
-	var p = new Vector3();
-	for (var i = 0; i < len; i += 3) {
-		getPoint(p, size);
-		data[i] = p.x;
-		data[i + 1] = p.y;
-		data[i + 2] = p.z;
+		const distance = Math.sqrt(Math.random() - 0.5) * 2.0;
+		const theta = MathUtils.randFloatSpread(360);
+		const phi = MathUtils.randFloatSpread(360);
+
+		data[stride] = distance * Math.sin(theta) * Math.cos(phi);
+		data[stride + 1] = distance * Math.sin(theta) * Math.sin(phi);
+		data[stride + 2] = distance * Math.cos(theta);
+		data[stride + 3] = 1.0; // this value will not have any impact
 	}
-	return data;
-}
 
-export { randomPointsInBufferGeometry, getRandomData, getSphere };
+	return data;
+};
+
+export { randomPointsInBufferGeometry, getRandomData };
