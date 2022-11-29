@@ -1,10 +1,12 @@
-/**
- * from https://github.com/mrdoob/three.js/blob/92db041e370f241f59aa1ea351b139cc0be997f4/examples/js/utils/GeometryUtils.js#L187
- * @author mrdoob / http://mrdoob.com/
- * @author alteredq / http://alteredqualia.com/
- */
-
-import { Vector3, MathUtils } from 'three';
+import {
+	Vector3,
+	MathUtils,
+	RGBAFormat,
+	FloatType,
+	DataTexture,
+	NearestFilter,
+} from 'three';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 // Get triangle area (half of parallelogram)
 // http://mathworld.wolfram.com/TriangleArea.html
@@ -161,4 +163,45 @@ const getRandomData = (width, height) => {
 	return data;
 };
 
-export { randomPointsInBufferGeometry, getRandomData };
+const getTextTexture = (text, font) => {
+	const textGeo = new TextGeometry(text, {
+		font,
+		size: 0.5,
+		height: 0.1,
+		curveSegments: 12,
+	});
+
+	textGeo.center();
+
+	const data = new Float32Array(256 * 256 * 4);
+	const points = randomPointsInBufferGeometry(textGeo, 256 * 256);
+
+	for (let i = 0, j = 0; i < data.length; i += 4, j += 1) {
+		data[i] = points[j].x;
+		data[i + 1] = points[j].y;
+		data[i + 2] = points[j].z;
+		data[i + 3] = 1.0;
+	}
+
+	const texture = new DataTexture(data, 256, 256, RGBAFormat, FloatType);
+	texture.minFilter = NearestFilter;
+	texture.magFilter = NearestFilter;
+	texture.needsUpdate = true;
+
+	return texture;
+};
+
+const getRandomTexture = () => {
+	const points = getRandomData(256, 256);
+	const texture = new DataTexture(
+		points,
+		256,
+		256,
+		RGBAFormat,
+		FloatType
+	);
+	texture.needsUpdate = true;
+
+	return texture;
+}
+export { getTextTexture, getRandomTexture };

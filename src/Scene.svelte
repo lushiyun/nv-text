@@ -9,106 +9,54 @@
 	import {
 		PerspectiveCamera,
 		ShaderMaterial,
-		RGBAFormat,
-		FloatType,
-		DataTexture,
 		AdditiveBlending,
 		AmbientLight,
-		Matrix4,
-		NearestFilter,
-		MathUtils,
-		Mesh,
-		MeshBasicMaterial,
-		Vector4,
 	} from 'three';
 	import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
-	import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 	import FBO from './lib/fbo';
+	import { getRandomTexture, getTextTexture } from './lib/util.js';
+	import data from './data.json';
 
 	import simulationVertex from './shaders/simulation/vertexShader';
 	import simulationFragment from './shaders/simulation/fragmentShader';
 	import particleVertex from './shaders/particles/vertexShader';
 	import particleFragment from './shaders/particles/fragmentShader';
-	import { getRandomData, randomPointsInBufferGeometry } from './lib/util.js';
 
 	const { renderer, scene } = useThrelte();
 
 	export let sliderValue;
+	let fbo;
 
 	let font;
-
 	const fontLoader = useLoader(FontLoader, () => new FontLoader());
 	fontLoader.load('src/assets/yahei_bold.json', (f) => {
 		font = f;
 		init();
 	});
 
-	let fbo;
-
-	const getTextTexture = (textGeo) => {
-		const data = new Float32Array(256 * 256 * 4);
-		const points = randomPointsInBufferGeometry(textGeo, 256 * 256);
-
-		for (let i = 0, j = 0; i < data.length; i += 4, j += 1) {
-			data[i] = points[j].x;
-			data[i + 1] = points[j].y;
-			data[i + 2] = points[j].z;
-			data[i + 3] = 1.0;
-		}
-
-		const texture = new DataTexture(
-			data,
-			256,
-			256,
-			RGBAFormat,
-			FloatType
-		);
-		texture.minFilter = NearestFilter;
-		texture.magFilter = NearestFilter;
-		texture.needsUpdate = true;
-
-		return texture;
-	}
-
 	const init = () => {
-		const width = 256;
-		const height = 256;
+		const textTextures = data.map((item) => getTextTexture(item.hanzi, font));
 
-		const textA = new TextGeometry('女', {
-			font,
-			size: 0.5,
-			height: 0.1,
-			curveSegments: 12,
-		});
-
-		const textureA = getTextTexture(textA);
-
-		const textB = new TextGeometry('男', {
-			font,
-			size: 0.5,
-			height: 0.1,
-			curveSegments: 12,
-		});
-
-		const textureC = getTextTexture(textB);
-
-		//second model
-		const dataB = getRandomData(width, height);
-		const textureB = new DataTexture(
-			dataB,
-			width,
-			height,
-			RGBAFormat,
-			FloatType
-		);
-		textureB.needsUpdate = true;
+		const randomTexture = getRandomTexture();
 
 		const simulationShader = new ShaderMaterial({
 			uniforms: {
-				textureA: { value: textureA },
-				textureB: { value: textureB },
-				textureC: { value: textureC },
+				randomTexture: { value: randomTexture },
+				texture0: { value: textTextures[0] },
+				texture1: { value: textTextures[1] },
+				texture2: { value: textTextures[2] },
+				texture3: { value: textTextures[3] },
+				texture4: { value: textTextures[4] },
+				texture5: { value: textTextures[5] },
+				texture6: { value: textTextures[6] },
+				texture7: { value: textTextures[7] },
+				texture8: { value: textTextures[8] },
+				texture9: { value: textTextures[9] },
+				texture10: { value: textTextures[10] },
+				texture11: { value: textTextures[11] },
+				texture12: { value: textTextures[12] },
+				texture13: { value: textTextures[13] },
 				timer: { value: 0 },
 			},
 			vertexShader: simulationVertex,
@@ -118,7 +66,7 @@
 		const renderShader = new ShaderMaterial({
 			uniforms: {
 				positions: { value: null },
-				pointSize: { value: 10.0 },
+				pointSize: { value: 5.0 },
 				alpha: { value: 1.0 },
 			},
 			vertexShader: particleVertex,
@@ -127,7 +75,7 @@
 			blending: AdditiveBlending,
 		});
 
-		fbo = new FBO(width, height, renderer, simulationShader, renderShader);
+		fbo = new FBO(256, 256, renderer, simulationShader, renderShader);
 
 		scene.add(fbo.particles);
 	};

@@ -10,7 +10,7 @@
 		<Scene {sliderValue} />
 	</Canvas>
 
-	<input type="range" min="0" max="1" step="0.01" bind:value={sliderValue} />
+	<input type="range" min="0" max="26" step="0.01" bind:value={sliderValue} />
 </div>
 
 <style>
