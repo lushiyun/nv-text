@@ -103,6 +103,7 @@ const randomPointsInBufferGeometry = (geometry, n) => {
 		}
 
 		var result = binarySearch(0, cumulativeAreas.length - 1);
+		console.log(result);
 		return result;
 	}
 
