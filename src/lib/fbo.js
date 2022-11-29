@@ -99,7 +99,6 @@ export default class FBO {
 			let i3 = i * 3;
 			vertices[i3 + 0] = (i % this.width) / this.width;
 			vertices[i3 + 1] = i / this.width / this.height;
-			vertices[i3 + 2] = 0;
 		}
 
 		// Create the particles geometry
@@ -111,7 +110,9 @@ export default class FBO {
 	}
 
 	update(time) {
-		// Update the simulation and render the result to a target texture
+		// this.renderer.render(this.scene, this.camera, this.rtt, true);
+		// this.particles.material.uniforms.positions.value = this.rtt;
+		//Update the simulation and render the result to a target texture
 		this.renderer.setRenderTarget(this.rtt);
 		this.renderer.clear();
 		this.renderer.render(this.scene, this.camera);
@@ -119,8 +120,8 @@ export default class FBO {
 		this.renderer.setRenderTarget(null);
 
 		// Use the result of the swap as the new position for the particles' renderer
-		this.particles.material.uniforms.uPositions.value = this.rtt.texture;
+		this.particles.material.uniforms.positions.value = this.rtt.texture;
 
-		this.simulationMaterial.uniforms.uTime.value = time;
+		this.simulationMaterial.uniforms.timer.value = time;
 	}
 }

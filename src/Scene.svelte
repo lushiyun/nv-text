@@ -6,85 +6,85 @@
 		RGBAFormat,
 		FloatType,
 		DataTexture,
+		AdditiveBlending,
+		AmbientLight,
 	} from 'three';
 
-	import { getRandomData, getSphere } from './lib/util';
 	import FBO from './lib/fbo';
 
 	import simulationVertex from './shaders/simulation/vertexShader';
 	import simulationFragment from './shaders/simulation/fragmentShader';
 	import particleVertex from './shaders/particles/vertexShader';
 	import particleFragment from './shaders/particles/fragmentShader';
-	import { AdditiveBlending } from 'three';
 
-	const params = {
-		width: 256,
-		height: 256,
+	export let sliderValue;
+
+	//returns a Float32Array buffer of random 3D coordinates
+	const getRandomData = (width, height) => {
+		// we need to create a vec4 since we're passing the positions to the fragment shader
+		// data textures need to have 4 components, R, G, B, and A
+		const length = width * height * 4;
+		const data = new Float32Array(length);
+
+		for (let i = 0; i < length; i++) {
+			const stride = i * 4;
+			data[stride] = Math.random() * 2.0 - 1.0;
+			data[stride + 1] = Math.random() * 2.0 - 1.0;
+			data[stride + 2] = Math.random() * 2.0 - 1.0;
+			data[stride + 3] = Math.random() * 2.0 - 1.0;
+		}
+
+		return data;
 	};
+
+	const width = 256;
+	const height = 256;
 
 	const { renderer, scene } = useThrelte();
 
 	//first model
-	var dataA = getRandomData(params.width, params.height, 256);
-	var textureA = new DataTexture(
-		dataA,
-		params.width,
-		params.height,
-		RGBAFormat,
-		FloatType
-	);
+	var dataA = getRandomData(width, height);
+	var textureA = new DataTexture(dataA, width, height, RGBAFormat, FloatType);
 	textureA.needsUpdate = true;
 
 	//second model
-	var dataB = getRandomData(params.width * params.height, 256);
-	var textureB = new DataTexture(
-		dataB,
-		params.width,
-		params.height,
-		RGBAFormat,
-		FloatType
-	);
+	var dataB = getRandomData(width, height);
+	var textureB = new DataTexture(dataB, width, height, RGBAFormat, FloatType);
 	textureB.needsUpdate = true;
 
-	const simulationMaterial = new ShaderMaterial({
-		vertexShader: simulationVertex,
-		fragmentShader: simulationFragment,
+	const simulationShader = new ShaderMaterial({
 		uniforms: {
-			uTime: { value: 0 },
 			textureA: { value: textureA },
 			textureB: { value: textureB },
+			timer: { value: 0 },
 		},
+		vertexShader: simulationVertex,
+		fragmentShader: simulationFragment,
 	});
 
-	const particleMaterial = new ShaderMaterial({
-		depthWrite: false,
-		blending: AdditiveBlending,
-		vertexColors: true,
-		transparent: true,
+	const renderShader = new ShaderMaterial({
+		uniforms: {
+			positions: { value: null },
+			pointSize: { value: 1 },
+			alpha: { value: 0.5 },
+		},
 		vertexShader: particleVertex,
 		fragmentShader: particleFragment,
-		uniforms: {
-			uPositions: { value: null },
-			uSize: { value: 1.0 },
-		},
+		transparent: true,
+		blending: AdditiveBlending,
 	});
 
-	const fbo = new FBO(
-		params.width,
-		params.height,
-		renderer,
-		simulationMaterial,
-		particleMaterial
-	);
+	const fbo = new FBO(width, height, renderer, simulationShader, renderShader);
 
 	scene.add(fbo.particles);
 
-	useFrame(({ clock }) => {
-		fbo.update(1.0);
+	useFrame(() => {
+		fbo.update(sliderValue);
 	});
 </script>
 
-<Three type={PerspectiveCamera} makeDefault position={[0, 0, 500]} fov={60}>
+<Three type={PerspectiveCamera} makeDefault position={[1.5, 1.5, 2.5]} fov={60}>
 	<OrbitControls />
 </Three>
-<!-- <Three type={fbo.particles} /> -->
+
+<Three type={AmbientLight} intensity={0.5} />

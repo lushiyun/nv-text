@@ -1,23 +1,22 @@
 const fragmentShader = `
-	uniform float uTime;
+// simulation
+uniform sampler2D textureA;
+uniform sampler2D textureB;
+uniform float timer;
 
-	uniform sampler2D textureA;
-	uniform sampler2D textureB;
+varying vec2 vUv;
 
-	varying vec2 vUv;
+void main() {
+	//origin
+	vec3 origin  = texture2D( textureA, vUv ).xyz;
 
-	void main() {
-		//origin
-		vec4 origin  = texture2D(textureA, vUv).rgba;
+	//destination
+	vec3 destination = texture2D( textureB, vUv ).xyz;
 
-		//destination
-		vec4 destination = texture2D(textureB, vUv).rgba;
-
-		//lerp
-		vec4 pos = mix(origin, destination, uTime);
-
-		gl_FragColor = vec4(pos);
-	}
+	//lerp
+	vec3 pos = mix( origin, destination, timer );
+	gl_FragColor = vec4( pos,1.0 );
+}
 `;
 
 export default fragmentShader;
