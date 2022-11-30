@@ -81,11 +81,17 @@
 	};
 
 	useFrame(() => {
+		// console.log(window);
+		// console.log(window.scrollY);
 		fbo?.update(sliderValue);
+
+		if (fbo?.particles) {
+			fbo.particles.rotation.y -= Math.PI / 180 * 0.05;
+		}
 	});
 </script>
 
-<Three type={PerspectiveCamera} makeDefault position={[0, 0, 2.5]} fov={60}>
+<Three type={PerspectiveCamera} makeDefault position={[0, 0, 2]} fov={60}>
 	<OrbitControls enableZoom={false} />
 </Three>
 
