@@ -22,7 +22,14 @@ varying vec2 vUv;
 void mixTextures(sampler2D textureA, sampler2D textureB, float normalizedTimer) {
 	vec3 origin = texture2D(textureA, vUv).xyz;
 	vec3 target = texture2D(textureB, vUv).xyz;
-	gl_FragColor = vec4(mix(origin, target, normalizedTimer), 1.0);
+
+	if (normalizedTimer <= 0.3) {
+		gl_FragColor = vec4(origin, 1.0);
+	} else if (normalizedTimer <= 0.7) {
+		gl_FragColor = vec4(mix(origin, target, (normalizedTimer - 0.3) / 0.4), 1.0);
+	} else {
+		gl_FragColor = vec4(target, 1.0);
+	}
 }
 
 void main() {
