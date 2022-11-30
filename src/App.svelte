@@ -12,7 +12,7 @@
 <div style="height: {`${innerHeight * 26}px`}" />
 
 <nav>
-	<h1>女 /NV</h1>
+	<h1>NV /</h1>
 </nav>
 
 <div class="wrapper">
@@ -87,6 +87,6 @@
 	}
 
 	h1 {
-		font-weight: 38px;
+		font-size: 48px;
 	}
 </style>
