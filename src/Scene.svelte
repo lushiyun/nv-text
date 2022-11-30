@@ -7,12 +7,7 @@
 		useThrelte,
 	} from '@threlte/core';
 	import { HTML } from '@threlte/extras';
-	import {
-		PerspectiveCamera,
-		ShaderMaterial,
-		AdditiveBlending,
-		AmbientLight,
-	} from 'three';
+	import { PerspectiveCamera, ShaderMaterial, AdditiveBlending } from 'three';
 	import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 
 	import FBO from './lib/fbo';
@@ -43,7 +38,7 @@
 	);
 
 	const fontLoader = useLoader(FontLoader, () => new FontLoader());
-	fontLoader.load('src/assets/yahei_bold.json', (f) => {
+	fontLoader.load('fonts/yahei_bold.json', (f) => {
 		font = f;
 		init();
 		start();
@@ -98,7 +93,3 @@
 <Three type={PerspectiveCamera} makeDefault position={[0, 0, 2]} fov={60}>
 	<OrbitControls enableZoom={false} />
 </Three>
-
-<!-- <Three type={Mesh} geometry={textGeometry} material={new MeshBasicMaterial()} /> -->
-
-<Three type={AmbientLight} intensity={0.5} />
