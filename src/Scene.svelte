@@ -6,6 +6,7 @@
 		useLoader,
 		useThrelte,
 	} from '@threlte/core';
+	import { HTML } from '@threlte/extras';
 	import {
 		PerspectiveCamera,
 		ShaderMaterial,

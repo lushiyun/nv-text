@@ -1,7 +1,7 @@
 <script>
 	import { Canvas } from '@threlte/core';
-  import Description from './Description.svelte';
 	import Scene from './Scene.svelte';
+	import data from './data.json';
 
 	let scrollY = 0.1;
 	let innerHeight = 0;
@@ -21,13 +21,23 @@
 	</Canvas>
 </div>
 
-<Description timer={scrollY / innerHeight} />
+<ul
+	class="description"
+	style="margin-top: {innerHeight / 2}px; gap: {innerHeight * 2}px"
+>
+	{#each data as item}
+		<li class="description-item">
+			<span>/ {item.hanzi}</span>
+			<span>/ {item.pinyin}</span>
+			<span>/ {item.english}</span>
+		</li>
+	{/each}
+</ul>
 
 <footer>
 	<a href="https://www.shiyunlu.com" target="_blank" rel="noopener noreferrer">
 		Made by Shiyun.
 	</a>
-
 </footer>
 
 <style>
@@ -48,10 +58,20 @@
 		padding-inline: 45px;
 	}
 
-	p {
-		position: fixed;
-		bottom: 60px;
+	.description {
+		pointer-events: none;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		position: absolute;
+		top: 0;
+		align-items: flex-end;
+		padding-inline: 45px;
+		font-size: 18px;
+	}
 
+	.description-item span {
+		margin-right: 20px;
 	}
 
 	footer {
