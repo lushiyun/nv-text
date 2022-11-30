@@ -36,7 +36,7 @@
 
 <footer>
 	<a href="https://www.shiyunlu.com" target="_blank" rel="noopener noreferrer">
-		Made by Shiyun.
+		Shiyun Lu.
 	</a>
 </footer>
 
