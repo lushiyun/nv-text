@@ -141,26 +141,27 @@ const randomPointsInBufferGeometry = (geometry, n) => {
 	return result;
 };
 
-const getRandomData = (width, height) => {
-	// we need to create a vec4 since we're passing the positions to the fragment shader
-	// data textures need to have 4 components, R, G, B, and A
-	const length = width * height * 4;
-	const data = new Float32Array(length);
+const getRandomData = () => {
+	const u = Math.random();
+  const v = Math.random();
 
-	for (let i = 0; i < length; i++) {
-		const stride = i * 4;
+  const theta = u * 2.0 * Math.PI;
+  const phi = Math.acos(2.0 * v - 1.0);
+  const r = Math.cbrt(Math.random());
 
-		const distance = Math.sqrt(Math.random() - 0.5) * 2.0;
-		const theta = MathUtils.randFloatSpread(360);
-		const phi = MathUtils.randFloatSpread(360);
+  const sinTheta = Math.sin(theta);
+  const cosTheta = Math.cos(theta);
 
-		data[stride] = distance * Math.sin(theta) * Math.cos(phi);
-		data[stride + 1] = distance * Math.sin(theta) * Math.sin(phi);
-		data[stride + 2] = distance * Math.cos(theta);
-		data[stride + 3] = 1.0; // this value will not have any impact
-	}
+  const sinPhi = Math.sin(phi);
+  const cosPhi = Math.cos(phi);
 
-	return data;
+  const vector = new Vector3();
+
+  vector.x = r * sinPhi * cosTheta;
+  vector.y = r * sinPhi * sinTheta;
+  vector.z = r * cosPhi;
+
+  return vector;
 };
 
 const getTextTexture = (text, font) => {
@@ -192,14 +193,24 @@ const getTextTexture = (text, font) => {
 };
 
 const getRandomTexture = () => {
-	const points = getRandomData(256, 256);
+	const data = new Float32Array(256 * 256 * 4);
+
+	for (let i = 0; i < data.length; i += 4) {
+		const point = getRandomData();
+		data[i] = point.x;
+		data[i + 1] = point.y;
+		data[i + 2] = point.z;
+		data[i + 3] = 1.0;
+	}
+
 	const texture = new DataTexture(
-		points,
+		data,
 		256,
 		256,
 		RGBAFormat,
 		FloatType
 	);
+
 	texture.needsUpdate = true;
 
 	return texture;
