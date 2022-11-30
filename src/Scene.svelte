@@ -86,7 +86,7 @@
 </script>
 
 <Three type={PerspectiveCamera} makeDefault position={[0, 0, 2.5]} fov={60}>
-	<OrbitControls />
+	<OrbitControls enableZoom={false} />
 </Three>
 
 <!-- <Three type={Mesh} geometry={textGeometry} material={new MeshBasicMaterial()} /> -->
