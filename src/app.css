@@ -1,18 +1,29 @@
+@font-face {
+	font-family: 'n27';
+	src: url('/fonts/n27-regular.woff2') format('woff2');
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
+  font-family: 'n27', -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif;;
 
   color-scheme: light dark;
-  /* color: rgba(255, 255, 255, 0.87); */
-  background-color: #000;
+  color: #F5F5F5;
+  background-color: #0F1115;
+  font-size: 14px;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+a {
+  color: #F5F5F5;
+  text-decoration: none;
 }
 
 * {
