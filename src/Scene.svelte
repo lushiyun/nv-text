@@ -24,8 +24,21 @@
 	import particleFragment from './shaders/particles/fragmentShader';
 
 	const { renderer, scene } = useThrelte();
+	const { start, started } = useFrame(
+		() => {
+			if ($started) {
+				// console.log(window.scrollTop);
+				// fbo?.update(scrollY);
 
-	export let sliderValue;
+				if (fbo?.particles) {
+					fbo.particles.rotation.y -= (Math.PI / 180) * 0.05;
+				}
+			}
+		},
+		{ autostart: false }
+	);
+
+	export let scrollY;
 	let fbo;
 
 	let font;
@@ -33,6 +46,7 @@
 	fontLoader.load('src/assets/yahei_bold.json', (f) => {
 		font = f;
 		init();
+		start();
 	});
 
 	const init = () => {
@@ -79,16 +93,6 @@
 
 		scene.add(fbo.particles);
 	};
-
-	useFrame(() => {
-		// console.log(window);
-		// console.log(window.scrollY);
-		fbo?.update(sliderValue);
-
-		if (fbo?.particles) {
-			fbo.particles.rotation.y -= Math.PI / 180 * 0.05;
-		}
-	});
 </script>
 
 <Three type={PerspectiveCamera} makeDefault position={[0, 0, 2]} fov={60}>
