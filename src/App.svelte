@@ -3,26 +3,26 @@
 	import Scene from './Scene.svelte';
 
 	let scrollY = 0.1;
-
-	// const onScroll = () => {
-	// 	scrollY = window.scrollY;
-	// 	console.log(scrollY);
-	// };
+	let innerHeight;
 </script>
 
-<svelte:window bind:scrollY={scrollY} />
+<svelte:window bind:scrollY bind:innerHeight />
 
-<div style="height: 10000px" on:click={onscroll} />
+<div style="height: {`${innerHeight * 26}px`}" />
 
-<div>
+<div class="wrapper">
 	<Canvas>
-		<Scene {scrollY} />
+		<Scene timer={scrollY / innerHeight} />
 	</Canvas>
 </div>
 
 <style>
-	div {
+	.wrapper {
+		position: fixed;
+		top: 0;
+		left: 0;
 		height: 100%;
 		width: 100%;
+		z-index: 1;
 	}
 </style>

@@ -166,8 +166,8 @@ const getRandomData = (width, height) => {
 const getTextTexture = (text, font) => {
 	const textGeo = new TextGeometry(text, {
 		font,
-		size: 0.5,
-		height: 0.1,
+		size: 1.0,
+		height: 0.2,
 		curveSegments: 12,
 	});
 

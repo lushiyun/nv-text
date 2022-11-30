@@ -23,12 +23,15 @@
 	import particleVertex from './shaders/particles/vertexShader';
 	import particleFragment from './shaders/particles/fragmentShader';
 
+	export let timer;
+	let font;
+	let fbo;
+
 	const { renderer, scene } = useThrelte();
 	const { start, started } = useFrame(
 		() => {
 			if ($started) {
-				// console.log(window.scrollTop);
-				// fbo?.update(scrollY);
+				fbo?.update(timer);
 
 				if (fbo?.particles) {
 					fbo.particles.rotation.y -= (Math.PI / 180) * 0.05;
@@ -38,10 +41,6 @@
 		{ autostart: false }
 	);
 
-	export let scrollY;
-	let fbo;
-
-	let font;
 	const fontLoader = useLoader(FontLoader, () => new FontLoader());
 	fontLoader.load('src/assets/yahei_bold.json', (f) => {
 		font = f;
