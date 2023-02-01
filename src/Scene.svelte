@@ -6,7 +6,6 @@
 		useLoader,
 		useThrelte,
 	} from '@threlte/core';
-	import { HTML } from '@threlte/extras';
 	import { PerspectiveCamera, ShaderMaterial, AdditiveBlending } from 'three';
 	import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 
