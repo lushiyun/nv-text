@@ -1,6 +1,5 @@
 import {
 	Vector3,
-	MathUtils,
 	RGBAFormat,
 	FloatType,
 	DataTexture,
