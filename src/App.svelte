@@ -35,9 +35,14 @@
 </ul>
 
 <footer>
-	<a href="https://www.shiyunlu.com" target="_blank" rel="noopener noreferrer">
-		Shiyun Lu.
-	</a>
+  <a
+    class="link"
+    href="https://www.shiyunlu.com"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    Shiyun Lu.
+  </a>
 </footer>
 
 <style>
@@ -74,19 +79,80 @@
 		margin-right: 20px;
 	}
 
-	footer {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		padding-bottom: 45px;
-		padding-inline: 45px;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
+  .description {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    align-items: flex-end;
+    padding-inline: 45px;
+    font-size: 18px;
+  }
 
-	h1 {
-		font-size: 48px;
-	}
+  .description-item span {
+    margin-right: 20px;
+  }
+
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding-bottom: 45px;
+    padding-inline: 45px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .link {
+    padding: 10px;
+    margin-left: -10px;
+    margin-bottom: -10px;
+  }
+
+  h1 {
+    font-size: 48px;
+  }
+
+  .scroll-indicator {
+    position: fixed;
+    bottom: 45px;
+    right: 45px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .scroll-text {
+    writing-mode: vertical-rl;
+  }
+
+  .line-wrapper {
+    overflow: hidden;
+  }
+
+  .scroll-line {
+    display: block;
+    width: 1px;
+    height: 100px;
+    background-color: #f5f5f5;
+    animation: drop 3s cubic-bezier(0.2, 0.65, 0.6, 1) infinite;
+  }
+
+  @keyframes drop {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
 </style>
