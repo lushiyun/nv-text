@@ -38,6 +38,11 @@
   </a>
 </footer>
 
+<aside class="scroll-indicator" class:hidden={scrollY >= innerHeight / 2}>
+  <small class="scroll-text">scroll</small>
+  <div class="line-wrapper"><span class="scroll-line" /></div>
+</aside>
+
 <div class="wrapper">
   <Canvas>
     <Scene timer={scrollY / innerHeight} />
@@ -115,5 +120,44 @@
 
   h1 {
     font-size: 48px;
+  }
+
+  .scroll-indicator {
+    position: fixed;
+    bottom: 45px;
+    right: 45px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .scroll-text {
+    writing-mode: vertical-rl;
+  }
+
+  .line-wrapper {
+    overflow: hidden;
+  }
+
+  .scroll-line {
+    display: block;
+    width: 1px;
+    height: 100px;
+    background-color: #f5f5f5;
+    animation: drop 3s cubic-bezier(0.2, 0.65, 0.6, 1) infinite;
+  }
+
+  @keyframes drop {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
   }
 </style>
