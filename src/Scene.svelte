@@ -98,6 +98,6 @@
   <OrbitControls
     enableZoom={false}
     enablePan={false}
-    touche={{ ONE: null, TWO: TOUCH.ROTATE }}
+    touches={{ ONE: undefined, TWO: TOUCH.ROTATE }}
   />
 </Three>
