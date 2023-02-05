@@ -16,7 +16,7 @@
 <div style="height: {`${innerHeight * 26}px`}" />
 
 <nav>
-  <h1>NV /</h1>
+  <a href="https://www.radicalnv.com/"><h1>NV /</h1></a>
 </nav>
 
 <ul
@@ -34,10 +34,41 @@
 
 <footer>
   <a
+    href="https://www.buymeacoffee.com/lushiyunL"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Buy me a coffee"
+  >
+    <svg
+      width="24px"
+      height="24px"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      color="currentColor"
+      ><path
+        d="M17 11.6V15a6 6 0 01-6 6H9a6 6 0 01-6-6v-3.4a.6.6 0 01.6-.6h12.8a.6.6 0 01.6.6zM12 9c0-1 .714-2 2.143-2v0A2.857 2.857 0 0017 4.143V3.5M8 9v-.5a3 3 0 013-3v0a2 2 0 002-2V3"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      /><path
+        d="M16 11h2.5a2.5 2.5 0 010 5H17"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      /></svg
+    >
+  </a>
+
+  <a
     class="link"
     href="https://www.shiyunlu.com"
     target="_blank"
     rel="noopener noreferrer"
+    aria-label="Visit my website"
   >
     Shiyun Lu.
   </a>
@@ -79,6 +110,7 @@
     place-items: center;
     background-color: #0f1115;
     color: #f5f5f5;
+    z-index: 2;
   }
 
   nav {
@@ -86,8 +118,9 @@
     top: 0;
     left: 0;
     width: 100%;
-    padding-top: 45px;
-    padding-inline: 45px;
+    padding-top: 20px;
+    padding-inline: 20px;
+    z-index: 1;
   }
 
   .loading {
@@ -102,12 +135,16 @@
     position: absolute;
     top: 0;
     align-items: flex-end;
-    padding-inline: 45px;
+    padding-inline: 20px;
     font-size: 18px;
   }
 
+  .description-item {
+    z-index: 1;
+  }
+
   .description-item span {
-    margin-right: 20px;
+    margin-right: 15px;
   }
 
   footer {
@@ -115,18 +152,26 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    padding-bottom: 45px;
-    padding-inline: 45px;
+    padding-bottom: 20px;
+    padding-inline: 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    z-index: 10;
+    gap: 5px;
+    z-index: 1;
   }
 
-  .link {
+  footer > a {
     padding: 10px;
-    margin-left: -10px;
     margin-bottom: -10px;
+    border-radius: 8px;
+  }
+
+  footer > a:first-child {
+    margin-left: -10px;
+  }
+
+  footer > a:hover {
+    background-color: gray;
   }
 
   h1 {
@@ -135,8 +180,8 @@
 
   .scroll-indicator {
     position: fixed;
-    bottom: 45px;
-    right: 45px;
+    bottom: 20px;
+    right: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -158,7 +203,7 @@
   .scroll-line {
     display: block;
     width: 1px;
-    height: 100px;
+    height: 50px;
     background-color: #f5f5f5;
     animation: drop 3s cubic-bezier(0.2, 0.65, 0.6, 1) infinite;
   }
@@ -169,6 +214,35 @@
     }
     100% {
       transform: translateY(0);
+    }
+  }
+
+  @media (min-width: 769px) {
+    nav {
+      padding-top: 45px;
+      padding-inline: 45px;
+    }
+
+    .description {
+      padding-inline: 45px;
+    }
+
+    .description-item span {
+      margin-right: 20px;
+    }
+
+    footer {
+      padding-bottom: 45px;
+      padding-inline: 45px;
+    }
+
+    .scroll-indicator {
+      bottom: 45px;
+      right: 45px;
+    }
+
+    .scroll-line {
+      height: 100px;
     }
   }
 </style>
