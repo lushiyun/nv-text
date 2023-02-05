@@ -245,4 +245,10 @@
       height: 100px;
     }
   }
+
+  @media (hover: none) {
+    .description {
+      z-index: 1;
+    }
+  }
 </style>

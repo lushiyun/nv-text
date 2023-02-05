@@ -95,9 +95,5 @@
 </script>
 
 <Three type={PerspectiveCamera} makeDefault position={[0, 0, 2]} fov={60}>
-  <OrbitControls
-    enableZoom={false}
-    enablePan={false}
-    touches={{ ONE: undefined, TWO: TOUCH.ROTATE }}
-  />
+  <OrbitControls enableZoom={false} />
 </Three>
